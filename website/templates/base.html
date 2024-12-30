@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+        <!-- Add custom CSS -->
+        <style>
+            body {
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                margin: 0;
+            }
+
+            .content-wrapper {
+                flex: 1 0 auto;
+            }
+
+            .footer {
+                flex-shrink: 0;
+                margin-top: auto;  /* This pushes the footer to the bottom */
+                padding: 20px 0;
+                background-color: #343a40;
+                color: white;
+            }
+
+            /* Your other existing styles */
+            .navbar-brand {
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: #fff !important;
+            }
+            .nav-link {
+                font-size: 1.1rem;
+                margin: 0 10px;
+            }
+            .note-card {
+                transition: transform 0.2s;
+                margin-bottom: 15px;
+            }
+            .note-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+            .form-control:focus {
+                border-color: #343a40;
+                box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.25);
+            }
+            .btn-primary {
+                background-color: #343a40;
+                border-color: #343a40;
+            }
+            .btn-primary:hover {
+                background-color: #23272b;
+                border-color: #23272b;
+            }
+        </style>
+        <title>{% block title %}Home{% endblock %}</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="/">Notes App</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar">
+                    <div class="navbar-nav ml-auto">
+                        {% if user and user.is_authenticated %}
+                        <span class="nav-item nav-link text-light">Welcome, {{ user.first_name }}!</span>
+                        <a class="nav-item nav-link" href="/"><i class="fa fa-home"></i> Home</a>
+                        <a class="nav-item nav-link" href="/logout"><i class="fa fa-sign-out"></i> Logout</a>
+                        {% else %}
+                        <a class="nav-item nav-link" href="/login"><i class="fa fa-sign-in"></i> Login</a>
+                        <a class="nav-item nav-link" href="/sign-up"><i class="fa fa-user-plus"></i> Sign Up</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="container mt-4">
+            {% block content %}{% endblock %}
+        </div>
+
+        <footer class="footer">
+            <div class="container text-center">
+                <p>&copy; 2024 Notes App. All rights reserved.</p>
+            </div>
+        </footer>
+
+        <!-- Scripts -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+    </body>
+</html>

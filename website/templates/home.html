@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mb-4">
+    <div class="col-md-8">
+        <h1 class="text-center mb-4">My Notes</h1>
+        
+        <form method="POST" class="mb-4">
+            <div class="form-group">
+                <textarea name="note" id="note" class="form-control" placeholder="Write your note here..." rows="3"></textarea>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="fa fa-plus"></i> Add Note
+                </button>
+            </div>
+        </form>
+
+        <div class="notes-container">
+            {% for note in user.notes|reverse %}
+            <div class="card note-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="card-text mb-0">{{ note.data }}</p>
+                        <div class="note-actions">
+                            <small class="text-muted mr-3">{{ note.date.strftime('%Y-%m-%d %H:%M') }}</small>
+                            <button type="button" class="btn btn-outline-danger btn-sm" onClick="deleteNote({{ note.id }})">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="text-center text-muted mt-4">
+                <i class="fa fa-sticky-note-o fa-3x mb-3"></i>
+                <p>No notes yet. Add your first note above!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
